@@ -1,0 +1,28 @@
+name: Sync multiple branches
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Opening pull request main -> test
+        id: test_branch_pr
+        uses: tretuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          FROM_BRANCH: main
+          TO_BRANCH: test
+
+      - name: Opening pull request main -> prod
+        id: prod_branch_pr 
+        uses: tretuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          FROM_BRANCH: main
+          TO_BRANCH: prod
